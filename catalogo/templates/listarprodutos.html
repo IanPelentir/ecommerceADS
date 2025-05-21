@@ -30,19 +30,40 @@
     <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
         {% for produto in produtos %}
         <article class="card">
-            {% if produto.imagem %}
-            <img src="{{ produto.imagem.url }}" alt="Imagem do produto {{ produto.nome }}" loading="lazy" style="max-height:180px; object-fit: contain; width: 100%;">
-            {% else %}
-            <div style="height: 180px; background:#eee; display:flex; align-items:center; justify-content:center; color:#aaa;">
-                Sem imagem
-            </div>
-            {% endif %}
+            <a href="#modal-{{ produto.id }}">
+                {% if produto.imagem %}
+                <img src="{{ produto.imagem.url }}" alt="Imagem do produto {{ produto.nome }}" loading="lazy" style="max-height:180px; object-fit: contain; width: 100%;">
+                {% else %}
+                <div style="height: 180px; background:#eee; display:flex; align-items:center; justify-content:center; color:#aaa;">
+                    Sem imagem
+                </div>
+                {% endif %}
+            </a>
             <div class="card-content" style="padding: 1rem;">
                 <h3>{{ produto.nome }}</h3>
                 <p style="min-height: 3em;">{{ produto.descricao|truncatewords:15 }}</p>
                 <p><strong>Preço:</strong> R$ {{ produto.preco }}</p>
-                <a href="#" class="contrast small">Adicionar ao carrinho</a>
+                <a href="#modal-{{ produto.id }}" class="contrast small">Ver detalhes</a>
             </div>
+
+            <!-- Modal -->
+            <dialog id="modal-{{ produto.id }}">
+                <article>
+                    <header>
+                        <a href="#" aria-label="Fechar" class="close" onclick="document.getElementById('modal-{{ produto.id }}').removeAttribute('open')"></a>
+                        <h3>{{ produto.nome }}</h3>
+                    </header>
+                    {% if produto.imagem %}
+                    <img src="{{ produto.imagem.url }}" alt="{{ produto.nome }}" style="max-width: 100%;">
+                    {% endif %}
+                    <p>{{ produto.descricao }}</p>
+                    <p><strong>Preço:</strong> R$ {{ produto.preco }}</p>
+                    <footer style="display: flex; justify-content: space-between;">
+                        <button onclick="document.getElementById('modal-{{ produto.id }}').removeAttribute('open')">Fechar</button>
+                        <button>Adicionar ao carrinho</button>
+                    </footer>
+                </article>
+            </dialog>
         </article>
         {% endfor %}
     </div>
@@ -51,4 +72,13 @@
     {% endif %}
 </section>
 
+<script>
+  document.querySelectorAll('a[href^="#modal-"]').forEach(link => {
+    link.addEventListener('click', e => {
+      e.preventDefault();
+      const id = link.getAttribute('href').substring(1);
+      document.getElementById(id).setAttribute('open', '');
+    });
+  });
+</script>
 {% endblock %}
