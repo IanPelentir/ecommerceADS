@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% block titulo %}Lista de Produtos - Loja Ifro{% endblock %}
+
+{% block conteudo %}
+<h2>Produtos</h2>
+
+<nav aria-label="Filtro por categoria" class="mb-4">
+    <ul class="inline-list">
+        <li>
+            {% if not request.GET.slugcat %}
+                <a href="{% url 'produtos-lista' %}" class="contrast">Todas as Categorias</a>
+            {% else %}
+                <a href="{% url 'produtos-lista' %}">Todas as Categorias</a>
+            {% endif %}
+        </li>
+        {% for categoria in categorias %}
+            <li>
+                {% if request.GET.slugcat == categoria.slug %}
+                    <a href="{% url 'produtos-lista' %}?slugcat={{ categoria.slug }}" class="contrast">{{ categoria.nome }}</a>
+                {% else %}
+                    <a href="{% url 'produtos-lista' %}?slugcat={{ categoria.slug }}">{{ categoria.nome }}</a>
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+</nav>
+
+<section>
+    {% if produtos %}
+    <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
+        {% for produto in produtos %}
+        <article class="card">
+            {% if produto.imagem %}
+            <img src="{{ produto.imagem.url }}" alt="Imagem do produto {{ produto.nome }}" loading="lazy" style="max-height:180px; object-fit: contain; width: 100%;">
+            {% else %}
+            <div style="height: 180px; background:#eee; display:flex; align-items:center; justify-content:center; color:#aaa;">
+                Sem imagem
+            </div>
+            {% endif %}
+            <div class="card-content" style="padding: 1rem;">
+                <h3>{{ produto.nome }}</h3>
+                <p style="min-height: 3em;">{{ produto.descricao|truncatewords:15 }}</p>
+                <p><strong>Preço:</strong> R$ {{ produto.preco }}</p>
+                <a href="#" class="contrast small">Comprar</a>
+            </div>
+        </article>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p>Nenhum produto encontrado.</p>
+    {% endif %}
+</section>
+
+{% endblock %}

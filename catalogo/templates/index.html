@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block titulo %}
+    Loja Ifro 2025 - Catálogo de Produtos
+{% endblock %}
+
+{% block conteudo %}
+<article data-theme="dark">
+    <h2>Melhor Ecommerce do Brasil</h2>
+    <p>Aproveite nossas ofertas ...</p>
+
+    <p><a href="{% url 'produtos-lista' %}">Veja todos os nossos produtos</a></p>
+</article>
+{% endblock %}
