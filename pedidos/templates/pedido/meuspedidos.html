@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block titulo %}Meus Pedidos{% endblock %}
+
+{% block conteudo %}
+<article>
+    <table class="striped">
+        <thead>
+            <tr>
+                <th>Pedido Nº</th>
+                <th>Itens</th>
+                <th>Total</th>
+                <th>Pago</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for p in pedidos %}
+        <tr>
+            <td>
+                <a href="{% url 'resumopedido' p.id %}">{{ p.id }}</a>
+            </td>
+            <td>
+                {% for i in p.itens_pedido.all %}
+                    {{ i.produto.nome }}<br>
+                {% endfor %}
+            </td>
+            <td>
+                {{ p.get_total_geral }}
+            </td>
+            <td>
+                {% if p.pago %}
+                    ✔️
+                {% else %}
+                    ✖️
+                {% endif %}
+            </td>
+        {% empty %}
+            <td colspan=4>Você ainda não possui pedidos!!!</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</article>
+{% endblock %}

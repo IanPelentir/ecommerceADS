@@ -1,14 +1,27 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block titulo %}
     Loja Ifro 2025 - Catálogo de Produtos
 {% endblock %}
-
 {% block conteudo %}
-<article data-theme="dark">
-    <h2>Melhor Ecommerce do Brasil</h2>
-    <p>Aproveite nossas ofertas ...</p>
-
-    <p><a href="{% url 'produtos-lista' %}">Veja todos os nossos produtos</a></p>
-</article>
+    <article data-theme="dark">
+        <h2>Melhor Ecommerce do Brasil</h2>
+        <p>Aproveite nossas ofertas ...</p>
+    </article>
+    <article class="grid" style="text-align:center">
+     {% for p in prods %}
+        <div>
+            <a href="{% url 'detalheprod' p.slug %}">
+          <img src="{% if p.imagem %}
+                       {{ p.imagem.url }}
+                    {% else %}
+                       {% static 'imagens/notfound.png' %}
+                    {% endif %}" alt="imagem de {{ p.nome }}"
+          width="112">
+        </a>
+            <p>{{ p.nome }} - R$ {{ p.preco }}</p>
+        </div>
+     {% endfor %}
+    </article>
 {% endblock %}

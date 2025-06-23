@@ -14,4 +14,3 @@ class ProdutoAdmin(admin.ModelAdmin):
     list_filter = ['disponivel', 'criado', 'atualizado']
     prepopulated_fields = {'slug':('nome',)}
     list_editable = ['preco', 'disponivel']
-

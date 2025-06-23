@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block titulo %}
+Ecommerce - Detalhe do produto {{ produto.nome }}
+{% endblock %}
+
+{% block conteudo %}
+<article id="conteudo">
+    <label>
+    <input name="tema" id="tema" type="checkbox" role="switch" />
+    💡
+  </label>
+    <header style="text-align:center">
+        <img src="{% if produto.imagem %}
+                       {{ produto.imagem.url }}
+                    {% else %}
+                       {% static 'imagens/notfound.png' %}
+                    {% endif %}"
+             alt="imagem de {{ p.nome }}"
+             width="275"
+        >
+    </header>
+    <details>
+        <summary role="button" class="outline">{{ produto.nome }}</summary>
+            <p>{{ produto.descricao }}</p>
+            <p>R$ {{ produto.preco }}</p>
+            <form action="{% url 'addcarrinho' produto.id %}" method="post">
+                {{ formadd }}
+                {% csrf_token %}
+                <input type="submit" value="🛒Adicionar ao Carrrinho"
+                       role="button" class="secondary">
+            </form>
+    </details>
+</article>
+<script>
+    tema.onchange = function(){
+        cont = document.querySelector("#conteudo");
+        if(this.checked){
+          cont.setAttribute('data-theme', 'dark');
+        }else{
+            cont.removeAttribute('data-theme');
+        }
+    }
+</script>
+{% endblock %}

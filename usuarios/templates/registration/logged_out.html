@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block titulo %}Logout {% endblock %}
+
+{% block conteudo %}
+<article data-theme="dark">
+  <h2>Logout</h2>
+  <h4>Você se desconectou do nosso sistema, você pode:</h4>
+  <p><a href="{% url 'loginuser' %}" role="button" class="secondary">
+       Entrar Novamente</a></p>
+  <p><a href="{% url 'home' %}" role="button">
+       Continuar como visitante</a></p>
+</article>
+{% endblock %}

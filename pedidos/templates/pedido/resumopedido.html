@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block titulo %} Seu Pedido {% endblock %}
+
+{% block conteudo %}
+<article>
+  <header>
+    <h1>Obrigado por comprar conosco</h1>
+  </header>
+  <table class="stripped">
+    <thead data-theme="dark">
+      <tr>
+        <th>Imagem</th>
+        <th>Produto</th>
+        <th>Quantidade</th>
+        <th>Preço Unitário</th>
+        <th>Total</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for item in pedido.itens_pedido.all %}
+      {% with p=item.produto %}
+        <tr>
+          <td>
+            <a href="{% url 'detalheprod' p.slug %}">
+              <img src="{% if p.imagem %}
+                       {{ p.imagem.url }}
+                    {% else %}
+                       {% static 'imagens/notfound.png' %}
+                    {% endif %}" alt="imagem de {{ p.nome }}"
+              width="80">
+            </a>
+          </td>
+          <td>
+            {{ p.nome }}
+          </td>
+          <td>
+            {{ item.quantidade }}
+          </td>
+          <td>R${{ item.preco }}</td>
+          <td>R${{ item.get_total }}</td>
+        </tr>
+      {% endwith %}
+    {% endfor %}
+    <tr>
+      <td colspan="4">Total Geral</td>
+      <td colspan="2">R$ {{ pedido.get_total_geral }}</td>
+    </tr>
+    </tbody>
+  </table>
+  <div class="grid">
+    <a href="{% url 'listtodos' %}" role="button" class="contrast">
+      Continuar comprando...
+    </a>
+    {% if not pedido.pago %}
+    <a href="" role="button" class="primary">
+      Efetuar pagamento
+    </a>
+    {% endif %}
+  </div>
+
+</article>
+{% endblock %}

@@ -1,5 +1,5 @@
-import os
-from datetime import datetime
+import os.path
+
 from django.db import models
 
 
@@ -20,17 +20,11 @@ class Categoria(models.Model):
     def __str__(self):
         return self.nome
 
-
 def get_upload_path(instance, filename):
-    # Usa a data atual no formato YYYY-MM-DD para criar subpasta
-    data_hoje = datetime.now().strftime('%Y-%m-%d')
-    ext = os.path.splitext(filename)[1]  # pega extensão do arquivo, ex: .jpg, .png
-    # nome do arquivo = slug + extensão
-    nome_arquivo = f'{instance.slug}{ext}'
-    # caminho completo dentro da pasta media
-    caminho = f'produtos/{data_hoje}/{nome_arquivo}'
+    slug = instance.slug
+    ext = os.path.splitext(filename)[1]
+    caminho = f'produtos/{slug}{ext}'
     return caminho
-
 
 class Produto(models.Model):
     objects = models.Manager()

@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block titulo %} Meu Carrinho {% endblock %}
+
+{% block conteudo %}
+<article>
+  <header>
+    <h1>Meu Carrinho de Compras 🛒</h1>
+  </header>
+  <table class="stripped">
+    <thead data-theme="dark">
+      <tr>
+        <th>Imagem</th>
+        <th>Produto</th>
+        <th>Quantidade</th>
+        <th>Preço Unitário</th>
+        <th>Total</th>
+        <th>Remover</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for item in carrinho %}
+      {% with p=item.produto %}
+        <tr>
+          <td>
+            <a href="{% url 'detalheprod' p.slug %}">
+              <img src="{% if p.imagem %}
+                       {{ p.imagem.url }}
+                    {% else %}
+                       {% static 'imagens/notfound.png' %}
+                    {% endif %}" alt="imagem de {{ p.nome }}"
+              width="80">
+            </a>
+          </td>
+          <td>
+            {{ p.nome }}
+          </td>
+          <td>
+            <form action="{% url 'addcarrinho' p.id %}" method="post">
+              {% csrf_token %}
+              {{ item.alterar.quant }}
+              {{ item.alterar.alterar }}
+              <input type="submit" value="Atualizar"
+                     role="button" class="dark">
+            </form>
+          </td>
+          <td>R${{ item.preco }}</td>
+          <td>R${{ item.preco_total }}</td>
+          <td>
+            <form action="{% url 'removecarrinho' p.id %}"
+                  method="post">
+              {% csrf_token %}
+              <input type="submit" value="🗑️" role="button">
+            </form>
+          </td>
+        </tr>
+      {% endwith %}
+    {% endfor %}
+    <tr>
+      <td colspan="4">Total Geral</td>
+      <td colspan="2">R$ {{ carrinho.get_preco_total }}</td>
+    </tr>
+    </tbody>
+  </table>
+  <div class="grid">
+    <a href="{% url 'listtodos' %}" role="button" class="contrast">
+      Continuar comprando...
+    </a>
+    <a href="{% url 'novopedido' %}" role="button" class="primary">
+      Finalizar Pedido
+    </a>
+  </div>
+
+</article>
+{% endblock %}

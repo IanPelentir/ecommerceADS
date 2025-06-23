@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block titulo %} Novo Pedido{% endblock %}
+
+{% block conteudo %}
+<article>
+  <h2>Seu Pedido</h2>
+  <ul>
+    {% for item in car %}
+    <li>
+      {{ item.quantidade }} ➡️ {{ item.produto.nome }}
+      <span>R${{ item.preco_total }}</span>
+    </li>
+    {% endfor %}
+  </ul>
+  <h4>Total: R${{ car.get_preco_total }}</h4>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_div }}
+    <input type="submit" role="button" class="light"
+           value="Finalizar Pedido">
+  </form>
+</article>
+{% endblock %}

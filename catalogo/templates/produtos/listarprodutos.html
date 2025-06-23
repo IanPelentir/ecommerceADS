@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block titulo %} Ecommerce -Lista de Produtos {% endblock %}
+
+{% block conteudo %}
+<article data-theme="dark">
+  {% for c in categs %}
+    <a href="{% url 'listprods' c.slug %}" role="button"
+       class="outline"> {{ c.nome }}</a>
+  {% empty %}
+    <a href="{% url 'home' %}" role="button" class="outline">Voltar</a>
+  {% endfor %}
+  <a href="{% url 'listtodos' %}" role="button" class="outline">
+    Todos
+  </a>
+</article>
+<article data-theme="light">
+  <h2> Produtos - Categoria
+      {% if cat %}
+        {{ cat.nome }}
+      {% else %}
+        Geral
+      {% endif %}
+  </h2>
+  <table class="striped">
+    <thead>
+    <tr>
+      <th>Imagem</th><th>Nome</th><th>Preco</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for p in produtos %}
+    <tr>
+      <td>
+        <a href="{% url 'detalheprod' p.slug %}">
+          <img src="{% if p.imagem %}
+                       {{ p.imagem.url }}
+                    {% else %}
+                       {% static 'imagens/notfound.png' %}
+                    {% endif %}" alt="imagem de {{ p.nome }}"
+          width="112">
+        </a>
+      </td>
+      <td>{{ p.nome }}</td>
+      <td>{{ p.preco }}</td>
+    </tr>
+    {% empty %}
+      <tr>
+        <td colspan="3">Não existem produtos dessa categoria.</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</article>
+{% endblock %}
